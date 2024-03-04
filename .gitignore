@@ -1,0 +1,13 @@
+# Environments / Secret stuff
+venv/
+.venv/
+.env
+.envrc
+
+### IDEs
+.vscode/
+.idea/
+
+
+# ----- Project specific dirs/files -----
+bot/config.py

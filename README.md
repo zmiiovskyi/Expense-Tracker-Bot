@@ -16,6 +16,7 @@ This Telegram bot allows you to easily track and manage your expenses. It is bui
 
 ## Installation
 
+1. Clone repository: `git clone https://github.com/zmiiovskyi/Expense-Tracker-Bot.git`
 2. Change into the project directory: `cd expense-tracker-bot`
 3. Install dependencies: `pip install -r requirements.txt`
 4. Create a new Telegram bot and obtain the API token

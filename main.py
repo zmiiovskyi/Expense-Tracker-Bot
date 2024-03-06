@@ -40,7 +40,7 @@ async def balance(message: types.Message) -> None:
 
 @dp.message(F.text=="Допомога")
 async def balance(message: types.Message) -> None:
-    await bot.send_message(chat_id=message.chat.id, text="У розробці ...")
+    await bot.send_message(chat_id=message.chat.id, text="Якщо вам потрібна моя допомога: @zmiiovskyi", reply_markup=keyboard.main_kb)
 
 
 @dp.message(F.text=="Інше")

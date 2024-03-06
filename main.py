@@ -19,8 +19,10 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 
+user_id = None
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message) -> None:
+    global user_id
     user_id = message.from_user.id
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
@@ -38,13 +40,13 @@ async def cmd_start(message: types.Message) -> None:
     )
     user(message)
     await bot.send_message(chat_id=message.chat.id, text=START_TEXT.format(message.from_user.first_name), reply_markup=keyboard.main_kb)
-    await bot.send_message(chat_id=message.chat.id, text=(f'Кориcтувач з id:{user_id}'), reply_markup=keyboard.main_kb)
+    await bot.send_message(chat_id=message.chat.id, text=(f'Ваш id:{user_id}'), reply_markup=keyboard.main_kb)
 
 def user(message: types.Message):
     user_id = message.from_user.id
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
-    cursor.execute(f"SELECT * FROM users WHERE user_id = {user_id}")
+    cursor.execute(f"SELECT cash FROM users WHERE user_id = {user_id}")
     user = cursor.fetchone()
     if user is None:
         cursor.execute(f"INSERT INTO users (user_id, cash, operations) VALUES ({user_id}, 0, '')")
@@ -53,8 +55,16 @@ def user(message: types.Message):
     conn.close()
 
 @dp.message(F.text=="Баланс")
-async def balance(message: types.Message) -> None:
-    await bot.send_message(chat_id=message.chat.id, text="Ваш баланс: 0")
+async def balance(message: types.Message, cash) -> None:
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT * FROM users WHERE user_id = {user_id}")
+    result = cursor.fetchone()
+    if result:
+        cash = result[0]
+    cursor.close()
+    conn.close()
+    await bot.send_message(chat_id=message.chat.id, text=(f"Ваш баланс: {cash}"), reply_markup=keyboard.main_kb)
 
 
 @dp.message(F.text=="Операції")
